@@ -7,6 +7,8 @@
 #property link      "https://www.mql5.com"
 #property strict
 
+#define cont    FileSeek(file_handle,-2,SEEK_CUR)
+
 class Pattern
 {
   public:
@@ -30,7 +32,15 @@ double Pattern::calculate_absolute_diff()
    return 0;
 }
 void Pattern::log_to_file(int file_handle)
-{  //TODO
+{
+   FileWrite(file_handle,"close");
+   for(int i=0;i<size;i++)
+   {
+      cont;
+      FileWrite(file_handle,"",close[i]);
+   }  
+   cont;
+//   FileWrite(file_handle,"","c4",close[4],"c5",close[5]);
 }
 Pattern::Pattern(const double &_src[],int _src_start,int _size)
 {

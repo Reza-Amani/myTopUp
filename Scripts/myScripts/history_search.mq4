@@ -7,12 +7,14 @@
 #property link      "https://www.mql5.com"
 #property version   "1.00"
 #property strict
+#property script_show_inputs
 
 #include <MyHeaders\MyMath.mqh>
 #include <MyHeaders\Pattern.mqh>
 #include <MyHeaders\ExamineBar.mqh>
 #include <MyHeaders\Screen.mqh>
-input int      pattern_len=5;
+#include <MyHeaders\Tools.mqh>
+input int      pattern_len=6;
 input int      back_search_len=20000;
 input int      history=40000;
 input int   correlation_thresh=93;
@@ -38,11 +40,21 @@ void OnStart()
 
    Pattern* p_pattern;
    ExamineBar* p_bar;
-   for(int _ref=10;_ref<history_size-back_search_len;_ref++)
+
+
+      p_pattern=new Pattern(Close,0,pattern_len);
+      p_pattern.log_to_file(outfilehandle);
+      delete p_pattern;
+/*   for(int _ref=10;_ref<history_size-back_search_len;_ref++)
    {
       p_pattern=new Pattern(Close,_ref,pattern_len);
       p_bar=new ExamineBar(_ref,p_pattern);
+      
+      
+      
+      delete p_bar;
+      delete p_pattern;
    }
-
+*/
 }
 //+------------------------------------------------------------------+
