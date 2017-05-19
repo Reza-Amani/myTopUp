@@ -7,6 +7,8 @@
 #property link      "https://www.mql5.com"
 #property strict
 
+#include <MyHeaders\MyMath.mqh>
+
 #define cont    FileSeek(file_handle,-2,SEEK_CUR)
 
 class Pattern
@@ -24,8 +26,8 @@ class Pattern
    double calculate_absolute_diff();
 };
 int Pattern::operator&(const Pattern &p2)const
-{  //TODO
-   return 1;
+{  //correlation
+   return MyMath::correlation_array(close,0,p2.close,0,size);
 }
 double Pattern::calculate_absolute_diff()
 {  

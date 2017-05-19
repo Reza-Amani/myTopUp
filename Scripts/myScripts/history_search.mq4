@@ -42,9 +42,15 @@ void OnStart()
    ExamineBar* p_bar;
 
 
-      p_pattern=new Pattern(Close,0,pattern_len);
-      p_pattern.log_to_file(outfilehandle);
-      delete p_pattern;
+   Pattern* p1;
+   Pattern* p2;
+      p1=new Pattern(Close,0,pattern_len);
+      p2=new Pattern(Close,8,pattern_len);
+      p1.log_to_file(outfilehandle);
+      p2.log_to_file(outfilehandle);
+      screen.add_L3_comment("corr=");
+      screen.add_L3_comment(IntegerToString(p1&p2));
+      delete p1;
 /*   for(int _ref=10;_ref<history_size-back_search_len;_ref++)
    {
       p_pattern=new Pattern(Close,_ref,pattern_len);

@@ -12,7 +12,40 @@ class MyMath
   public:
    static double max(double v1,double v2=-DBL_MAX,double v3=-DBL_MAX,double v4=-DBL_MAX,double v5=-DBL_MAX,double v6=-DBL_MAX);
    static double min(double v1,double v2=DBL_MAX,double v3=DBL_MAX,double v4=DBL_MAX,double v5=DBL_MAX,double v6=DBL_MAX);
+   static int correlation_array(const double &array1[],int offset1,const double &array2[],int offset2,int _len);
 };
+int MyMath::correlation_array(const double &array1[],int offset1,const double &array2[],int offset2,int _len)
+{
+//sigma(x-avgx)(y-avgy)/sqrt(sigma(x-avgx)2*sigma(y-avgy)2)
+   double x,y;
+   double avg1=0,avg2=0;
+   int i;
+   for(i=0; i<_len; i++)
+   {
+      x = array1[i+offset1];
+      y = array2[i+offset2];
+      avg1 += x;
+      avg2 += y;
+   }
+   avg1 /= _len;
+   avg2 /= _len;
+
+   double x_xby_yb=0,x_xb2=0,y_yb2=0;
+   for(i=0; i<_len; i++)
+   {
+      x = array1[i+offset1];
+      y = array2[i+offset2];
+      x_xby_yb+=(x-avg1)*(y-avg2);
+      x_xb2 += (x-avg1)*(x-avg1);
+      y_yb2 += (y-avg2)*(y-avg2);
+   }
+
+   if(x_xb2*y_yb2==0)
+      return 0;
+
+   return (int)((double)100*x_xby_yb/MathSqrt(x_xb2 * y_yb2));
+}
+
 double MyMath::max(double v1,double v2=-DBL_MAX,double v3=-DBL_MAX,double v4=-DBL_MAX,double v5=-DBL_MAX,double v6=-DBL_MAX)
 {
    double result=v1;
