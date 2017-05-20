@@ -15,11 +15,12 @@ class Pattern
 {
   public:
    Pattern();
-   Pattern(const double &_src[],int _src_start, int _size);
+   Pattern(const double &_src[],int _src_start, int _size, double _f_close1);
    int size;
    double close[];
+   double fc1;
    double absolute_diffs;
-   void set_data(const double &_src[],int _src_start, int _size);
+   void set_data(const double &_src[],int _src_start, int _size, double _f_close1);
    void log_to_file(int file_handle);
    int operator&(const Pattern &p2)const;
   private:
@@ -50,19 +51,23 @@ void Pattern::log_to_file(int file_handle)
    cont;
    FileWrite(file_handle,"","diff",absolute_diffs);
 }
-Pattern::Pattern(const double &_src[],int _src_start,int _size)
+Pattern::Pattern(const double &_src[],int _src_start,int _size, double _f_close1)
 {
-   size = _size;
+   set_data(_src,_src_start,_size,_f_close1);
+/*   size = _size;
+   fc1=_f_close1;
    ArrayResize(close,size);
    ArrayCopy(close,_src,0,_src_start,size);
    absolute_diffs = calculate_absolute_diff();
+*/
 }
 Pattern::Pattern(void)
 {
 }
-void Pattern::set_data(const double &_src[],int _src_start, int _size)
+void Pattern::set_data(const double &_src[],int _src_start, int _size, double _f_close1)
 {
    size = _size;
+   fc1=_f_close1;
    ArrayResize(close,size);
    ArrayCopy(close,_src,0,_src_start,size);
    absolute_diffs = calculate_absolute_diff();

@@ -14,10 +14,10 @@
 #include <MyHeaders\ExamineBar.mqh>
 #include <MyHeaders\Screen.mqh>
 #include <MyHeaders\Tools.mqh>
-input int      pattern_len=6;
-input int      correlation_thresh=93;
-input int      back_search_len=20000;
-input int      history=40000;
+input int      pattern_len=12;
+input int      correlation_thresh=94;
+input int      back_search_len=2000;
+input int      history=4000;
 input int      min_hit=20;
 input int      max_hit=100;
 
@@ -54,21 +54,30 @@ void OnStart()
       screen.add_L3_comment(IntegerToString(p1&p2));
       delete p1;
       */
+      
+   int output_counter=0;
    for(int _ref=10;_ref<history_size-back_search_len;_ref++)
    {
-      p_pattern=new Pattern(Close,_ref,pattern_len);
-      p_bar=new ExamineBar(_ref,p_pattern);
+      p_pattern=new Pattern(Close,_ref,pattern_len,Close[_ref-1]);
       
+      p_bar=new ExamineBar(_ref,p_pattern);
+     
       for(int j=10;j<back_search_len-pattern_len;j++)
       {
-         moving_pattern.set_data(Close,j,pattern_len);
+         moving_pattern.set_data(Close,j,pattern_len,Close[j-1]);
          if(p_bar.check_another_bar(moving_pattern,correlation_thresh,max_hit))
             break;
       }
       if(p_bar.number_of_hits>=min_hit)
       {  //a famous bar!
          p_bar.log_to_file(outfilehandle);
+         output_counter++;
       }
+      
+      screen.clear_L2_comment();
+      screen.add_L2_comment("output:"+IntegerToString(output_counter));
+      screen.clear_L3_comment();
+      screen.add_L3_comment("counter:"+IntegerToString(_ref));
             
       
       delete p_bar;
