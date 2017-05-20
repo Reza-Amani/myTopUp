@@ -15,9 +15,11 @@
 #include <MyHeaders\Screen.mqh>
 #include <MyHeaders\Tools.mqh>
 input int      pattern_len=6;
+input int      correlation_thresh=93;
 input int      back_search_len=20000;
 input int      history=40000;
-input int   correlation_thresh=93;
+input int      min_hit=20;
+input int      max_hit=100;
 
 //+------------------------------------------------------------------+
 //| Script program start function                                    |
@@ -40,27 +42,38 @@ void OnStart()
 
    Pattern* p_pattern;
    ExamineBar* p_bar;
+   Pattern moving_pattern;
 
-
-   Pattern* p1;
+/*   Pattern* p1;
    Pattern* p2;
-      p1=new Pattern(Close,0,pattern_len);
-      p2=new Pattern(Close,8,pattern_len);
+      p1=new Pattern(Close,2,pattern_len);
+      p2=new Pattern(Close,17,pattern_len);
       p1.log_to_file(outfilehandle);
       p2.log_to_file(outfilehandle);
       screen.add_L3_comment("corr=");
       screen.add_L3_comment(IntegerToString(p1&p2));
       delete p1;
-/*   for(int _ref=10;_ref<history_size-back_search_len;_ref++)
+      */
+   for(int _ref=10;_ref<history_size-back_search_len;_ref++)
    {
       p_pattern=new Pattern(Close,_ref,pattern_len);
       p_bar=new ExamineBar(_ref,p_pattern);
       
-      
+      for(int j=10;j<back_search_len-pattern_len;j++)
+      {
+         moving_pattern.set_data(Close,j,pattern_len);
+         if(p_bar.check_another_bar(moving_pattern,correlation_thresh,max_hit))
+            break;
+      }
+      if(p_bar.number_of_hits>=min_hit)
+      {  //a famous bar!
+         p_bar.log_to_file(outfilehandle);
+      }
+            
       
       delete p_bar;
       delete p_pattern;
    }
-*/
+
 }
 //+------------------------------------------------------------------+

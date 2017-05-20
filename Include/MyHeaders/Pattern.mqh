@@ -41,7 +41,7 @@ double Pattern::calculate_absolute_diff()
 }
 void Pattern::log_to_file(int file_handle)
 {
-   FileWrite(file_handle,"close");
+   FileWrite(file_handle,"","close");
    for(int i=0;i<size;i++)
    {
       cont;
