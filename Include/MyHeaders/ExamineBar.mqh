@@ -16,8 +16,8 @@ class ExamineBar
    int barno;
    Pattern* pattern;
 
-   int number_of_hits,c1_higher_cnt;
-   double sum_c1;
+   int number_of_hits;
+   double sum_ac1;
    double higher_c1;
    
    void log_to_file(int file_handle);
@@ -27,8 +27,8 @@ class ExamineBar
 ExamineBar::ExamineBar(int _barno, Pattern* _pattern)
 {
    barno=_barno; pattern=_pattern;
-   number_of_hits=0;c1_higher_cnt=0;
-   sum_c1=0;
+   number_of_hits=0;
+   sum_ac1=0;
    higher_c1=0;
 }
 
@@ -38,13 +38,13 @@ void ExamineBar::log_to_file(int file_handle)
    cont;
    FileWrite(file_handle,"","hits",number_of_hits);
    cont;
-   FileWrite(file_handle,"","C1higher",c1_higher_cnt);
+   if(number_of_hits!=0)
+      FileWrite(file_handle,"","aveC1",sum_ac1/number_of_hits);
    cont;
-   FileWrite(file_handle,"","aveC1",sum_c1/MyMath::max(1,number_of_hits));
+   if(number_of_hits!=0)
+      FileWrite(file_handle,"","higherC1",higher_c1,higher_c1/number_of_hits);
    cont;
-   FileWrite(file_handle,"","higherC1",higher_c1);
-   cont;
-   FileWrite(file_handle,"","resulthC1",pattern.fc1-pattern.close[0]);
+   FileWrite(file_handle,"","resulthC1",pattern.fc1-pattern.close[0],pattern.ac1);
    cont;
    pattern.log_to_file(file_handle);
 
@@ -55,8 +55,7 @@ bool ExamineBar::check_another_bar(Pattern &_check_pattern, int _correlation_thr
    if((pattern & _check_pattern) >= _correlation_thresh)
    {  //found a match!
       number_of_hits++;
-      //if(c1_higher_cnt;
-      sum_c1+=_check_pattern.fc1;
+      sum_ac1+=_check_pattern.ac1;
       if(_check_pattern.fc1>_check_pattern.close[0])
          higher_c1++;
 

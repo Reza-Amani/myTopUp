@@ -18,7 +18,7 @@ class Pattern
    Pattern(const double &_src[],int _src_start, int _size, double _f_close1);
    int size;
    double close[];
-   double fc1;
+   double fc1,ac1;
    double absolute_diffs;
    void set_data(const double &_src[],int _src_start, int _size, double _f_close1);
    void log_to_file(int file_handle);
@@ -71,4 +71,8 @@ void Pattern::set_data(const double &_src[],int _src_start, int _size, double _f
    ArrayResize(close,size);
    ArrayCopy(close,_src,0,_src_start,size);
    absolute_diffs = calculate_absolute_diff();
+   if(absolute_diffs!=0)
+      ac1=(fc1-close[0])/absolute_diffs;
+   else
+      ac1=0;
 }
