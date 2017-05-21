@@ -44,7 +44,8 @@ void ExamineBar::log_to_file(int file_handle)
    if(number_of_hits!=0)
       FileWrite(file_handle,"","higherC1",higher_c1,higher_c1/number_of_hits);
    cont;
-   FileWrite(file_handle,"","resulthC1",pattern.fc1-pattern.close[0],pattern.ac1);
+   if(number_of_hits!=0)
+      FileWrite(file_handle,"","result_dC1&ac1",pattern.fc1-pattern.close[0],pattern.ac1,(pattern.ac1>0)?1:-1);
    cont;
    pattern.log_to_file(file_handle);
 
