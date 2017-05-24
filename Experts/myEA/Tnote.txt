@@ -1,3 +1,6 @@
+skipping search for quality of pattern, if the success rate is not positive in last 20 hits (good for both considering the most recent results and the consistency)
+
+
 A simple strategy- 
   trend-based
 		-recognising the trend
