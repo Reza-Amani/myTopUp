@@ -16,10 +16,12 @@
 #include <MyHeaders\Tools.mqh>
 input int      pattern_len=12;
 input int      correlation_thresh=94;
-input int      back_search_len=2000;
-input int      history=4000;
+input int      hit_threshold=70;
 input int      min_hit=20;
 input int      max_hit=100;
+input ConcludeCriterion criterion=USE_HC1;
+input int      back_search_len=2000;
+input int      history=4000;
 
 //+------------------------------------------------------------------+
 //| Script program start function                                    |
@@ -57,7 +59,8 @@ void OnStart()
          if(p_bar.check_another_bar(moving_pattern,correlation_thresh,max_hit))
             break;
       }
-      if(p_bar.number_of_hits>=min_hit)
+//      if(p_bar.number_of_hits>=min_hit)
+      if(p_bar.conclude(criterion,min_hit,hit_threshold))
       {  //a famous bar!
          p_bar.log_to_file(outfilehandle);
          output_counter++;

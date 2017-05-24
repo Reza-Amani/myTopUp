@@ -9,6 +9,10 @@
 
 #include <MyHeaders\Pattern.mqh>
 
+enum ConcludeCriterion
+{
+   USE_HC1
+};
 class ExamineBar
 {
   public:
@@ -22,6 +26,7 @@ class ExamineBar
    
    void log_to_file(int file_handle);
    bool check_another_bar(Pattern &_check_pattern, int _correlation_thresh, int _max_hit);
+   bool conclude(ConcludeCriterion _criterion, int _min_hits, int _hit_thresh);
 
 };
 ExamineBar::ExamineBar(int _barno, Pattern* _pattern)
@@ -62,4 +67,18 @@ bool ExamineBar::check_another_bar(Pattern &_check_pattern, int _correlation_thr
 
    }
    return (number_of_hits>=_max_hit);
+}
+
+bool ExamineBar::conclude(ConcludeCriterion _criterion, int _min_hits, int _hit_thresh)
+{
+   if(number_of_hits<_min_hits)
+      return false;
+   switch(_criterion)
+   {
+      case USE_HC1:
+         if( 100*higher_c1/number_of_hits > _hit_thresh )
+            return true;
+         break;
+   }
+   return false;
 }
