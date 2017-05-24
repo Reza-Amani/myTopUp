@@ -16,7 +16,7 @@
 #include <MyHeaders\Tools.mqh>
 input int      pattern_len=12;
 input int      correlation_thresh=94;
-input int      hit_threshold=70;
+input int      hit_threshold=60;
 input int      min_hit=20;
 input int      max_hit=100;
 input ConcludeCriterion criterion=USE_HC1;

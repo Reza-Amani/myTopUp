@@ -50,16 +50,12 @@ void Pattern::log_to_file(int file_handle)
    }  
    cont;
    FileWrite(file_handle,"","diff",absolute_diffs);
+   cont;
+   FileWrite(file_handle,"","fc1ac1",fc1,ac1);
 }
 Pattern::Pattern(const double &_src[],int _src_start,int _size, double _f_close1)
 {
    set_data(_src,_src_start,_size,_f_close1);
-/*   size = _size;
-   fc1=_f_close1;
-   ArrayResize(close,size);
-   ArrayCopy(close,_src,0,_src_start,size);
-   absolute_diffs = calculate_absolute_diff();
-*/
 }
 Pattern::Pattern(void)
 {

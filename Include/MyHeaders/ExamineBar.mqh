@@ -21,8 +21,10 @@ class ExamineBar
    Pattern* pattern;
 
    int number_of_hits;
+   int success_rate;
    double sum_ac1;
    double higher_c1;
+   int direction;
    
    void log_to_file(int file_handle);
    bool check_another_bar(Pattern &_check_pattern, int _correlation_thresh, int _max_hit);
@@ -35,6 +37,8 @@ ExamineBar::ExamineBar(int _barno, Pattern* _pattern)
    number_of_hits=0;
    sum_ac1=0;
    higher_c1=0;
+   success_rate=0;
+   direction=0;
 }
 
 void ExamineBar::log_to_file(int file_handle)
@@ -76,8 +80,18 @@ bool ExamineBar::conclude(ConcludeCriterion _criterion, int _min_hits, int _hit_
    switch(_criterion)
    {
       case USE_HC1:
-         if( 100*higher_c1/number_of_hits > _hit_thresh )
+         success_rate = (int)(100*higher_c1/number_of_hits);
+         if( success_rate >= _hit_thresh )
+         {
+            direction=1;
             return true;
+         }
+         if( success_rate < 100-_hit_thresh )
+         {
+            direction=0;
+            return true;
+         }
+         
          break;
    }
    return false;
