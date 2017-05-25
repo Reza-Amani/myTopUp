@@ -20,8 +20,8 @@ input int      hit_threshold=60;
 input int      min_hit=20;
 input int      max_hit=100;
 input ConcludeCriterion criterion=USE_HC1;
-input int      back_search_len=10000;
-input int      history=14000;
+input int      bars_to_search=2000;
+input int      lookback_len=2000;
 
 //+------------------------------------------------------------------+
 //| Script program start function                                    |
@@ -39,7 +39,12 @@ void OnStart()
       return;
      }
    screen.add_L1_comment("file ok-");
-   int history_size=(int)MyMath::min(Bars,history);
+   if(Bars<lookback_len+bars_to_search)
+   {
+      Print("Not enough history");
+      screen.add_L1_comment("short history");
+      return;
+   }
    screen.add_L1_comment("CalculatingBars:"+IntegerToString(history_size)+"-");
 
    Pattern* p_pattern;
