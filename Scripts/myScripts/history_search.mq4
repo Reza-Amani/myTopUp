@@ -45,20 +45,20 @@ void OnStart()
       screen.add_L1_comment("short history");
       return;
    }
-   screen.add_L1_comment("CalculatingBars:"+IntegerToString(history_size)+"-");
+   screen.add_L1_comment("-in"+IntegerToString(lookback_len)+"for"+IntegerToString(bars_to_search));
 
    Pattern* p_pattern;
    ExamineBar* p_bar;
    Pattern moving_pattern;
       
    int output_counter=0;
-   for(int _ref=10;_ref<history_size-back_search_len;_ref++)
+   for(int _ref=10;_ref<bars_to_search;_ref++)
    {
       p_pattern=new Pattern(Close,_ref,pattern_len,Close[_ref-1]);
       
       p_bar=new ExamineBar(_ref,p_pattern);
      
-      for(int j=10+_ref;j<back_search_len-pattern_len;j++)
+      for(int j=10+_ref;j<_ref+lookback_len-pattern_len;j++)
       {
          moving_pattern.set_data(Close,j,pattern_len,Close[j-1]);
          if(p_bar.check_another_bar(moving_pattern,correlation_thresh,max_hit))
