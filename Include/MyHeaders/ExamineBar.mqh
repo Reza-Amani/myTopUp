@@ -11,7 +11,8 @@
 
 enum ConcludeCriterion
 {
-   USE_HC1
+   USE_HC1,
+   USE_aveC1
 };
 class ExamineBar
 {
@@ -93,6 +94,20 @@ bool ExamineBar::conclude(ConcludeCriterion _criterion, int _min_hits, int _hit_
          }
          
          break;
+      case USE_aveC1:
+         success_rate = (int)(100*sum_ac1/number_of_hits);
+         if( success_rate >= _hit_thresh )
+         {
+            direction=1;
+            return true;
+         }
+         if( success_rate < 100-_hit_thresh )
+         {
+            direction=0;
+            return true;
+         }
+         break;
+
    }
    return false;
 }
