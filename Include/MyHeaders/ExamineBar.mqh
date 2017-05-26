@@ -9,6 +9,8 @@
 
 #include <MyHeaders\Pattern.mqh>
 
+#define MAX_AC1   2
+
 enum ConcludeCriterion
 {
    USE_HC1,
@@ -49,7 +51,7 @@ void ExamineBar::log_to_file(int file_handle)
    FileWrite(file_handle,"","hits",number_of_hits);
    cont;
    if(number_of_hits!=0)
-      FileWrite(file_handle,"","aveC1",sum_ac1/number_of_hits);
+      FileWrite(file_handle,"","aveaC1",sum_ac1/number_of_hits);
    cont;
    if(number_of_hits!=0)
       FileWrite(file_handle,"","higherC1",higher_c1,higher_c1/number_of_hits);
@@ -66,7 +68,7 @@ bool ExamineBar::check_another_bar(Pattern &_check_pattern, int _correlation_thr
    if((pattern & _check_pattern) >= _correlation_thresh)
    {  //found a match!
       number_of_hits++;
-      sum_ac1+=_check_pattern.ac1;
+      sum_ac1+=MyMath::cap(_check_pattern.ac1,MAX_AC1,-MAX_AC1);
       if(_check_pattern.fc1>_check_pattern.close[0])
          higher_c1++;
 
@@ -95,7 +97,7 @@ bool ExamineBar::conclude(ConcludeCriterion _criterion, int _min_hits, int _hit_
          
          break;
       case USE_aveC1:
-         success_rate = (int)(100*sum_ac1/number_of_hits);
+         success_rate = (int)((double)100*sum_ac1/number_of_hits);
          if( success_rate >= _hit_thresh )
          {
             direction=1;

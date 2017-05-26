@@ -14,14 +14,16 @@
 #include <MyHeaders\ExamineBar.mqh>
 #include <MyHeaders\Screen.mqh>
 #include <MyHeaders\Tools.mqh>
-input int      pattern_len=12;
-input int      correlation_thresh=94;
+
+
+input int      pattern_len=6;
+input int      correlation_thresh=95;
 input int      hit_threshold=60;
 input int      min_hit=20;
 input int      max_hit=100;
 input ConcludeCriterion criterion=USE_HC1;
-input int      bars_to_search=2000;
-input int      lookback_len=2000;
+input int      bars_to_search=3000;
+input int      lookback_len=3000;
 
 //+------------------------------------------------------------------+
 //| Script program start function                                    |
