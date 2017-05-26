@@ -6,12 +6,16 @@
 #property copyright "Reza"
 #property link      "https://www.mql5.com"
 #property strict
+
+#include <MyHeaders\Tools.mqh>
+
 /////////////////////////////////////////////////////////////////class
 class MyMath
 {
   public:
    static double max(double v1,double v2=-DBL_MAX,double v3=-DBL_MAX,double v4=-DBL_MAX,double v5=-DBL_MAX,double v6=-DBL_MAX);
    static double min(double v1,double v2=DBL_MAX,double v3=DBL_MAX,double v4=DBL_MAX,double v5=DBL_MAX,double v6=DBL_MAX);
+   static double cap(double in,double _max,double _min);
    static int correlation_array(const double &array1[],int offset1,const double &array2[],int offset2,int _len);
 };
 int MyMath::correlation_array(const double &array1[],int offset1,const double &array2[],int offset2,int _len)
@@ -64,6 +68,20 @@ double MyMath::min(double v1,double v2=DBL_MAX,double v3=DBL_MAX,double v4=DBL_M
    if(v4<result)  result=v4;
    if(v5<result)  result=v5;
    if(v6<result)  result=v6;
+   return result;
+}
+static double MyMath::cap(double in,double _max,double _min)
+{
+   if(_max<_min)
+   {
+      Tools::error("max<min");
+      return 0;
+   }
+   double result=in;
+   if(result>_max)
+      result=_max;
+   if(result<_min)
+      result=_min;
    return result;
 }
 //+------------------------------------------------------------------+

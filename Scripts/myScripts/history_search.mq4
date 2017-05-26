@@ -14,14 +14,16 @@
 #include <MyHeaders\ExamineBar.mqh>
 #include <MyHeaders\Screen.mqh>
 #include <MyHeaders\Tools.mqh>
-input int      pattern_len=12;
-input int      correlation_thresh=94;
+
+
+input int      pattern_len=6;
+input int      correlation_thresh=95;
 input int      hit_threshold=60;
 input int      min_hit=20;
 input int      max_hit=100;
 input ConcludeCriterion criterion=USE_HC1;
-input int      back_search_len=10000;
-input int      history=14000;
+input int      bars_to_search=3000;
+input int      lookback_len=3000;
 
 //+------------------------------------------------------------------+
 //| Script program start function                                    |
@@ -39,21 +41,26 @@ void OnStart()
       return;
      }
    screen.add_L1_comment("file ok-");
-   int history_size=(int)MyMath::min(Bars,history);
-   screen.add_L1_comment("CalculatingBars:"+IntegerToString(history_size)+"-");
+   if(Bars<lookback_len+bars_to_search)
+   {
+      Print("Not enough history");
+      screen.add_L1_comment("short history");
+      return;
+   }
+   screen.add_L1_comment("-in"+IntegerToString(lookback_len)+"for"+IntegerToString(bars_to_search));
 
    Pattern* p_pattern;
    ExamineBar* p_bar;
    Pattern moving_pattern;
       
    int output_counter=0;
-   for(int _ref=10;_ref<history_size-back_search_len;_ref++)
+   for(int _ref=10;_ref<bars_to_search;_ref++)
    {
       p_pattern=new Pattern(Close,_ref,pattern_len,Close[_ref-1]);
       
       p_bar=new ExamineBar(_ref,p_pattern);
      
-      for(int j=10+_ref;j<back_search_len-pattern_len;j++)
+      for(int j=10+_ref;j<_ref+lookback_len-pattern_len;j++)
       {
          moving_pattern.set_data(Close,j,pattern_len,Close[j-1]);
          if(p_bar.check_another_bar(moving_pattern,correlation_thresh,max_hit))
