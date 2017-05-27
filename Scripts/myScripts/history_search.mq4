@@ -21,7 +21,7 @@ input int      correlation_thresh=95;
 input int      hit_threshold=60;
 input int      min_hit=20;
 input int      max_hit=100;
-input ConcludeCriterion criterion=USE_HC1;
+input ConcludeCriterion criterion=USE_aveC1;
 input int      bars_to_search=3000;
 input int      lookback_len=3000;
 
@@ -68,7 +68,7 @@ void OnStart()
       }
 //      if(p_bar.number_of_hits>=min_hit)
       if(p_bar.conclude(criterion,min_hit,hit_threshold))
-      {  //a famous bar!
+      {  //a famous and good bar!
          p_bar.log_to_file(outfilehandle);
          output_counter++;
       }

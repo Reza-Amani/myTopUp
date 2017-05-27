@@ -103,7 +103,7 @@ bool ExamineBar::conclude(ConcludeCriterion _criterion, int _min_hits, int _hit_
             direction=1;
             return true;
          }
-         if( success_rate < 100-_hit_thresh )
+         if( success_rate < -_hit_thresh )
          {
             direction=0;
             return true;
