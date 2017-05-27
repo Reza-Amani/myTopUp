@@ -14,7 +14,8 @@
 enum ConcludeCriterion
 {
    USE_HC1,
-   USE_aveC1
+   USE_aveC1,
+   USE_HC1aveC1
 };
 class ExamineBar
 {
@@ -57,6 +58,9 @@ void ExamineBar::log_to_file(int file_handle)
       FileWrite(file_handle,"","higherC1",higher_c1,higher_c1/number_of_hits);
    cont;
    if(number_of_hits!=0)
+      FileWrite(file_handle,"","SR&direction",success_rate,direction);
+   cont;
+   if(number_of_hits!=0)
       FileWrite(file_handle,"","result_dC1&ac1",pattern.fc1-pattern.close[0],pattern.ac1,(pattern.ac1>0)?1:-1);
    cont;
    pattern.log_to_file(file_handle);
@@ -80,6 +84,7 @@ bool ExamineBar::conclude(ConcludeCriterion _criterion, int _min_hits, int _hit_
 {
    if(number_of_hits<_min_hits)
       return false;
+   int temp;
    switch(_criterion)
    {
       case USE_HC1:
@@ -91,23 +96,28 @@ bool ExamineBar::conclude(ConcludeCriterion _criterion, int _min_hits, int _hit_
          }
          if( success_rate < 100-_hit_thresh )
          {
-            direction=0;
+            direction=-1;
+            success_rate=100-success_rate;
             return true;
          }
          
          break;
       case USE_aveC1:
-         success_rate = (int)((double)100*sum_ac1/number_of_hits);
-         if( success_rate >= _hit_thresh )
+         temp = (int)((double)100*sum_ac1/number_of_hits);
+         if( temp >= _hit_thresh )
          {
+            success_rate=temp;
             direction=1;
             return true;
          }
-         if( success_rate < -_hit_thresh )
+         if( temp < -_hit_thresh )
          {
-            direction=0;
+            success_rate=-temp;
+            direction=-1;
             return true;
          }
+         break;
+      case USE_HC1aveC1:
          break;
 
    }
