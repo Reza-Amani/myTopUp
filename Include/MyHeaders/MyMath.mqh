@@ -16,6 +16,7 @@ class MyMath
    static double max(double v1,double v2=-DBL_MAX,double v3=-DBL_MAX,double v4=-DBL_MAX,double v5=-DBL_MAX,double v6=-DBL_MAX);
    static double min(double v1,double v2=DBL_MAX,double v3=DBL_MAX,double v4=DBL_MAX,double v5=DBL_MAX,double v6=DBL_MAX);
    static double cap(double in,double _max,double _min);
+   static int sign(double in);
    static int correlation_array(const double &array1[],int offset1,const double &array2[],int offset2,int _len);
 };
 int MyMath::correlation_array(const double &array1[],int offset1,const double &array2[],int offset2,int _len)
@@ -83,6 +84,15 @@ static double MyMath::cap(double in,double _max,double _min)
    if(result<_min)
       result=_min;
    return result;
+}
+
+static int MyMath::sign(double in)
+{
+   if(in<0)
+      return -1;
+   else if(in>0)
+      return 1;
+   else return 0;
 }
 //+------------------------------------------------------------------+
 //| defines                                                          |
